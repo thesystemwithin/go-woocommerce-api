@@ -3,7 +3,7 @@ A Woocommerce API Golang Wrapper for the [Woocommerce Rest API (v3)](https://woo
 
 # Install
 
-```
+```console
 $ go get github.com/dinistavares/go-woocommerce-api
 ```
 
@@ -38,7 +38,7 @@ List Orders by customerID and page number.
 
 ```go
 func (client *woocommerce.Client) listOrders() {
-  customerID := "3"
+  customerID := 3
   pageNumber := 1
 
   opts := woocommerce.ListOrdersParams{
