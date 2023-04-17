@@ -199,21 +199,6 @@ func (service *OrdersService) List(opts ListOrdersParams) (*[]Order, *http.Respo
   return orders, response, nil
 }
 
-// Get an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-an-order
-func (service *OrdersService) Get(orderId string , opts GetOrderParams) (*Order, *http.Response, error) {
-  _url := "/orders/" + orderId
-  req, _ := service.client.NewRequest("GET", _url, opts, nil)
-
-  order := new(Order)
-  response, err := service.client.Do(req, order)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return order, response, nil
-}
-
 // Create an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-an-order
 func (service *OrdersService) Create(order Order) (*Order, *http.Response, error) {
   _url := "/orders"
@@ -227,6 +212,21 @@ func (service *OrdersService) Create(order Order) (*Order, *http.Response, error
   }
 
   return createdOrder, response, nil
+}
+
+// Get an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-an-order
+func (service *OrdersService) Get(orderId string , opts GetOrderParams) (*Order, *http.Response, error) {
+  _url := "/orders/" + orderId
+  req, _ := service.client.NewRequest("GET", _url, opts, nil)
+
+  order := new(Order)
+  response, err := service.client.Do(req, order)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return order, response, nil
 }
 
 // Update an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-an-order

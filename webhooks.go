@@ -69,21 +69,6 @@ func (service *WebhookService) List(opts ListWebhooksParams) (*[]Webhook,  *http
   return webhooks, response, nil
 }
 
-// Get a wehook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-a-webhook
-func (service *WebhookService) Get(webhookID string) (*Webhook, *http.Response, error) {
-  _url := "/webhooks/" + webhookID
-  req, _ := service.client.NewRequest("GET", _url, nil, nil)
-
-  webhook := new(Webhook)
-  response, err := service.client.Do(req, webhook)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return webhook, response, nil
-}
-
 // Create a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-webhook
 func (service *WebhookService) Create(webhook Webhook) (*Webhook, *http.Response, error) {
   _url := "/webhooks" 
@@ -97,6 +82,21 @@ func (service *WebhookService) Create(webhook Webhook) (*Webhook, *http.Response
   }
 
   return createdWebhook, response, nil
+}
+
+// Get a wehook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-a-webhook
+func (service *WebhookService) Get(webhookID string) (*Webhook, *http.Response, error) {
+  _url := "/webhooks/" + webhookID
+  req, _ := service.client.NewRequest("GET", _url, nil, nil)
+
+  webhook := new(Webhook)
+  response, err := service.client.Do(req, webhook)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return webhook, response, nil
 }
 
 // Update a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-webhook

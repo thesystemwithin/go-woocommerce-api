@@ -94,21 +94,6 @@ func (service *CustomersService) List(opts ListCustomerParams) (*[]Customer, *ht
   return customers, response, nil
 }
 
-// Get a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-a-customer
-func (service *CustomersService) Get(customerID string) (*Customer, *http.Response, error) {
-  _url := "/customers/" + customerID
-  req, _ := service.client.NewRequest("GET", _url, nil, nil)
-
-  customer := new(Customer)
-  response, err := service.client.Do(req, customer)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return customer, response, nil
-}
-
 // Create a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-customer
 func (service *CustomersService) Create(customer Customer) (*Customer, *http.Response, error) {
   _url := "/customers" 
@@ -122,6 +107,21 @@ func (service *CustomersService) Create(customer Customer) (*Customer, *http.Res
   }
 
   return createdCustomer, response, nil
+}
+
+// Get a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-a-customer
+func (service *CustomersService) Get(customerID string) (*Customer, *http.Response, error) {
+  _url := "/customers/" + customerID
+  req, _ := service.client.NewRequest("GET", _url, nil, nil)
+
+  customer := new(Customer)
+  response, err := service.client.Do(req, customer)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return customer, response, nil
 }
 
 // Update a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-customer
