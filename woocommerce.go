@@ -49,6 +49,7 @@ type Client struct {
   Orders        *OrdersService
   OrderNotes    *OrderNotesService
   Refunds       *RefundsService
+  Products      *ProductsService
   Webhooks      *WebhookService
 }
 
@@ -102,6 +103,7 @@ func New(shopURL string) (*Client, error) {
   client.Orders = &OrdersService{client: client}
   client.OrderNotes = &OrderNotesService{client: client}
   client.Refunds = &RefundsService{client: client}
+  client.Products = &ProductsService{client: client}
   client.Webhooks = &WebhookService{client: client}
 
   return client, nil
