@@ -75,7 +75,7 @@ type BatchCouponUpdateResponse struct {
 }
 
 // Create a coupon. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-coupon
-func (service *CouponsService) Create(coupon Coupon) (*Coupon, *http.Response, error) {
+func (service *CouponsService) Create(coupon *Coupon) (*Coupon, *http.Response, error) {
   _url := "/coupons" 
   req, _ := service.client.NewRequest("POST", _url, nil, coupon)
 
@@ -105,7 +105,7 @@ func (service *CouponsService) Get(couponID string) (*Coupon, *http.Response, er
 }
 
 // List coupons. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-coupons
-func (service *CouponsService) List(opts ListCouponParams) (*[]Coupon, *http.Response, error) {
+func (service *CouponsService) List(opts *ListCouponParams) (*[]Coupon, *http.Response, error) {
   _url := "/coupons"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -120,7 +120,7 @@ func (service *CouponsService) List(opts ListCouponParams) (*[]Coupon, *http.Res
 }
 
 // Update a coupon. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-coupon
-func (service *CouponsService) Update(couponID string, coupon Coupon) (*Coupon, *http.Response, error) {
+func (service *CouponsService) Update(couponID string, coupon *Coupon) (*Coupon, *http.Response, error) {
   _url := "/coupons/" + couponID
   req, _ := service.client.NewRequest("PUT", _url, nil, coupon)
 
@@ -135,7 +135,7 @@ func (service *CouponsService) Update(couponID string, coupon Coupon) (*Coupon, 
 }
 
 // Delete a coupon. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-a-coupon
-func (service *CouponsService) Delete(couponID string, opts DeleteCouponParams) (*Coupon, *http.Response, error) {
+func (service *CouponsService) Delete(couponID string, opts *DeleteCouponParams) (*Coupon, *http.Response, error) {
   _url := "/coupons/" + couponID
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
@@ -150,7 +150,7 @@ func (service *CouponsService) Delete(couponID string, opts DeleteCouponParams) 
 }
 
 // Batch update coupons. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#batch-update-coupons
-func (service *CouponsService) Batch(opts BatchCouponUpdate) (*BatchCouponUpdateResponse, *http.Response, error) {
+func (service *CouponsService) Batch(opts *BatchCouponUpdate) (*BatchCouponUpdateResponse, *http.Response, error) {
   _url := "/coupons/batch"
   req, _ := service.client.NewRequest("POST", _url, nil, opts)
 
