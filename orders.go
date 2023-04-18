@@ -247,7 +247,7 @@ func (service *OrdersService) Update(orderId string , order Order) (*Order, *htt
 // Delete an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-an-order
 func (service *OrdersService) Delete(orderId string , opts DeleteOrderParams) (*Order, *http.Response, error) {
   _url := "/orders/" + orderId
-  req, _ := service.client.NewRequest("DELETE", _url, nil, opts)
+  req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
   order := new(Order)
   response, err := service.client.Do(req, order)
