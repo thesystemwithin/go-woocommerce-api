@@ -38,6 +38,7 @@ The API routes are broken down into services, the supported services are:
 * Coupons `(Create, Get, List, Update, Delete, Batch)`
 * Customers `(Create, Get, List, Update, Delete, Batch, GetDownloads)`
 * Orders `(Create, Get, List, Update, Delete, Batch)`
+* OrderNotes `(Create, Get, List, Delete)`
 * Webhooks `(Create, Get, List, Update, Delete, Batch)`
 
 List Orders by customer ID and page number.
