@@ -50,7 +50,7 @@ type Order struct {
   Shipping           *Shipping        `json:"shipping,omitempty"`
   Links              *Links           `json:"_links,omitempty"`
   FeeLines           *[]FeeLine       `json:"fee_lines,omitempty"`
-  Refunds            *[]Refund        `json:"refunds,omitempty"`
+  Refunds            *[]OrderRefund   `json:"refunds,omitempty"`
   MetaData           *[]MetaData      `json:"meta_data,omitempty"`
   CouponLines        *[]CouponLine    `json:"coupon_lines,omitempty"`
   LineItems          *[]LineItems     `json:"line_items,omitempty"`
@@ -58,7 +58,7 @@ type Order struct {
   ShippingLines      *[]ShippingLines `json:"shipping_lines,omitempty"`  
 }
 
-type Refund struct {
+type OrderRefund struct {
   ID     int    `json:"id,omitempty"`
   Reason string `json:"reason,omitempty"`
   Total  string `json:"total,omitempty"`

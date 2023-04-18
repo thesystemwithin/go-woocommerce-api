@@ -4,7 +4,7 @@ import (
   "net/http"
 )
 
-// OrderNotes service
+// Order Notes service
 type OrderNotesService service
 
 // OrderNote object. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#order-note-properties
@@ -57,7 +57,7 @@ func (service *OrderNotesService) Get(orderId string, noteId string) (*OrderNote
   return orderNote, response, nil
 }
 
-// List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-orders
+// List order Notes. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-order-notes
 func (service *OrderNotesService) List(orderId string, opts *ListOrderNotesParams) (*[]OrderNote, *http.Response, error) {
   _url := "/orders/" + orderId + "/notes"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
