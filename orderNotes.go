@@ -28,8 +28,8 @@ type DeleteOrderNoteParams struct {
 }
 
 // Create an order Note. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-an-order-note
-func (service *OrderNotesService) Create(orderNote OrderNote) (*OrderNote, *http.Response, error) {
-  _url := "/orders"
+func (service *OrderNotesService) Create(orderId string, orderNote OrderNote) (*OrderNote, *http.Response, error) {
+  _url := "/orders/" + orderId + "/notes"
   req, _ := service.client.NewRequest("POST", _url, nil, orderNote)
 
   createdOrder := new(OrderNote)
@@ -43,9 +43,9 @@ func (service *OrderNotesService) Create(orderNote OrderNote) (*OrderNote, *http
 }
 
 // Get an order Note. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-an-order-note
-func (service *OrderNotesService) Get(orderId string , opts GetOrderParams) (*OrderNote, *http.Response, error) {
-  _url := "/orders/" + orderId
-  req, _ := service.client.NewRequest("GET", _url, opts, nil)
+func (service *OrderNotesService) Get(orderId string, noteId string) (*OrderNote, *http.Response, error) {
+  _url := "/orders/" + orderId + "/notes/" + noteId
+  req, _ := service.client.NewRequest("GET", _url, nil, nil)
 
   orderNote := new(OrderNote)
   response, err := service.client.Do(req, orderNote)
@@ -58,8 +58,8 @@ func (service *OrderNotesService) Get(orderId string , opts GetOrderParams) (*Or
 }
 
 // List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-orders
-func (service *OrderNotesService) List(opts ListOrderNotesParams) (*[]OrderNote, *http.Response, error) {
-  _url := "/orders"
+func (service *OrderNotesService) List(orderId string, opts ListOrderNotesParams) (*[]OrderNote, *http.Response, error) {
+  _url := "/orders/" + orderId + "/notes"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
   orders := new([]OrderNote)
@@ -72,25 +72,10 @@ func (service *OrderNotesService) List(opts ListOrderNotesParams) (*[]OrderNote,
   return orders, response, nil
 }
 
-// Update an order Note. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-an-order-note
-func (service *OrderNotesService) Update(orderId string , orderNote OrderNote) (*OrderNote, *http.Response, error) {
-  _url := "/orders/" + orderId
-  req, _ := service.client.NewRequest("PUT", _url, nil, orderNote)
-
-  updatedOrder := new(OrderNote)
-  response, err := service.client.Do(req, updatedOrder)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return updatedOrder, response, nil
-}
-
 // Delete an order Note. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-an-order-note
-func (service *OrderNotesService) Delete(orderId string , opts DeleteOrderParams) (*OrderNote, *http.Response, error) {
-  _url := "/orders/" + orderId
-  req, _ := service.client.NewRequest("DELETE", _url, nil, opts)
+func (service *OrderNotesService) Delete(orderId string, noteId string, opts DeleteOrderParams) (*OrderNote, *http.Response, error) {
+  _url := "/orders/" + orderId + "/notes/" + noteId
+  req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
   orderNote := new(OrderNote)
   response, err := service.client.Do(req, orderNote)
