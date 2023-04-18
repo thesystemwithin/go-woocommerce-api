@@ -44,10 +44,11 @@ type Client struct {
   auth *auth
   baseURL *url.URL
 
-  Coupons *CouponsService
-  Customers *CustomersService
-  Orders    *OrdersService
-  Webhooks  *WebhookService
+  Coupons       *CouponsService
+  Customers     *CustomersService
+  Orders        *OrdersService
+  OrderNotes    *OrderNotesService
+  Webhooks      *WebhookService
 }
 
 type service struct {
@@ -98,6 +99,7 @@ func New(shopURL string) (*Client, error) {
   client.Coupons = &CouponsService{client: client}
   client.Customers = &CustomersService{client: client}
   client.Orders = &OrdersService{client: client}
+  client.OrderNotes = &OrderNotesService{client: client}
   client.Webhooks = &WebhookService{client: client}
 
   return client, nil
