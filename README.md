@@ -40,6 +40,7 @@ The API routes are broken down into services, the supported services are:
 * Orders `(Create, Get, List, Update, Delete, Batch)`
 * OrderNotes `(Create, Get, List, Delete)`
 * Refunds `(Create, Get, List, Delete)`
+* Products `(Create, Get, List, Update, Delete, Batch)`
 * Webhooks `(Create, Get, List, Update, Delete, Batch)`
 
 List Orders by customer ID and page number.
