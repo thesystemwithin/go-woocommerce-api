@@ -113,11 +113,6 @@ type LineItems struct {
   ParentName  interface{}    `json:"parent_name,omitempty"`
 }
 
-type Image struct {
-  Id      interface{}  `json:"id,omitempty"`
-  Source  string       `json:"src,omitempty"`
-}
-
 type TaxLines struct {
   ID               int           `json:"id,omitempty"`
   RateCode         string        `json:"rate_code,omitempty"`
