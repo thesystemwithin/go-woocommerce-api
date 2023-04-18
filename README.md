@@ -9,7 +9,7 @@ $ go get github.com/dinistavares/go-woocommerce-api
 
 # Usage
 
-Create a new API client and authenticate with your REST API keys.
+Create a new API client and authenticate with your REST API keys. You should specify the URL protocol by prefixing your domain name with `https://` or `http://`. Follow the [Woocommerce documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication) to create your API keys through the [Wordpress admin interface](https://woocommerce.github.io/woocommerce-rest-api-docs/#generating-api-keys-in-the-wordpress-admin-interface) or using the [authentication endpoint](https://woocommerce.github.io/woocommerce-rest-api-docs/#creating-an-authentication-endpoint-url). 
 
 ```go
 import (
@@ -34,7 +34,13 @@ func main(){
 
 ```
 
-List Orders by customerID and page number.
+The API routes are broken down into services, the supported services are: 
+* Coupons `(Create, Get, List, Update, Delete, Batch)`
+* Customers `(Create, Get, List, Update, Delete, Batch, GetDownloads)`
+* Orders `(Create, Get, List, Update, Delete, Batch)`
+* Webhooks `(Create, Get, List, Update, Delete, Batch)`
+
+List Orders by customer ID and page number.
 
 ```go
 func (client *woocommerce.Client) listOrders() {

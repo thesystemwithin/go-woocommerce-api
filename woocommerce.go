@@ -44,6 +44,7 @@ type Client struct {
   auth *auth
   baseURL *url.URL
 
+  Coupons *CouponsService
   Customers *CustomersService
   Orders    *OrdersService
   Webhooks  *WebhookService
@@ -94,6 +95,7 @@ func New(shopURL string) (*Client, error) {
   client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
 
   // Map services
+  client.Coupons = &CouponsService{client: client}
   client.Customers = &CustomersService{client: client}
   client.Orders = &OrdersService{client: client}
   client.Webhooks = &WebhookService{client: client}
