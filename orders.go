@@ -110,7 +110,7 @@ type LineItems struct {
   Sku         string         `json:"sku,omitempty"`
   Price       float64        `json:"price,omitempty"`
   Image       *Image         `json:"image,omitempty"`
-  ParentName  interface{}   `json:"parent_name,omitempty"`
+  ParentName  interface{}    `json:"parent_name,omitempty"`
 }
 
 type Image struct {
@@ -184,21 +184,6 @@ type BatchOrderUpdateResponse struct {
   Delete  *[]Order `json:"delete,omitempty"`
 }
 
-// List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-orders
-func (service *OrdersService) List(opts ListOrdersParams) (*[]Order, *http.Response, error) {
-  _url := "/orders"
-  req, _ := service.client.NewRequest("GET", _url, opts, nil)
-
-  orders := new([]Order)
-  response, err := service.client.Do(req, orders)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return orders, response, nil
-}
-
 // Create an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-an-order
 func (service *OrdersService) Create(order Order) (*Order, *http.Response, error) {
   _url := "/orders"
@@ -227,6 +212,21 @@ func (service *OrdersService) Get(orderId string , opts GetOrderParams) (*Order,
   }
 
   return order, response, nil
+}
+
+// List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-orders
+func (service *OrdersService) List(opts ListOrdersParams) (*[]Order, *http.Response, error) {
+  _url := "/orders"
+  req, _ := service.client.NewRequest("GET", _url, opts, nil)
+
+  orders := new([]Order)
+  response, err := service.client.Do(req, orders)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return orders, response, nil
 }
 
 // Update an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-an-order

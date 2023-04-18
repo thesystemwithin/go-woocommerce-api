@@ -54,21 +54,6 @@ type BatchWebhookUpdateResponse struct {
   Delete  *[]Webhook  `json:"delete,omitempty"`
 }
 
-// List Webhooks. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-webhooks
-func (service *WebhookService) List(opts ListWebhooksParams) (*[]Webhook,  *http.Response, error) {
-  _url := "/webhooks"
-  req, _ := service.client.NewRequest("GET", _url, opts, nil)
-
-  webhooks := new([]Webhook)
-  response, err := service.client.Do(req, webhooks)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return webhooks, response, nil
-}
-
 // Create a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-webhook
 func (service *WebhookService) Create(webhook Webhook) (*Webhook, *http.Response, error) {
   _url := "/webhooks" 
@@ -97,6 +82,21 @@ func (service *WebhookService) Get(webhookID string) (*Webhook, *http.Response, 
   }
 
   return webhook, response, nil
+}
+
+// List Webhooks. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-webhooks
+func (service *WebhookService) List(opts ListWebhooksParams) (*[]Webhook,  *http.Response, error) {
+  _url := "/webhooks"
+  req, _ := service.client.NewRequest("GET", _url, opts, nil)
+
+  webhooks := new([]Webhook)
+  response, err := service.client.Do(req, webhooks)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return webhooks, response, nil
 }
 
 // Update a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-webhook

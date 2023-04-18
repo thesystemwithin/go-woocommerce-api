@@ -79,21 +79,6 @@ type File struct  {
   File  string  `json:"file,omitempty"`
 }
 
-// List customers. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-customers
-func (service *CustomersService) List(opts ListCustomerParams) (*[]Customer, *http.Response, error) {
-  _url := "/customers"
-  req, _ := service.client.NewRequest("GET", _url, opts, nil)
-
-  customers := new([]Customer)
-  response, err := service.client.Do(req, customers)
-
-  if err != nil {
-    return nil, response, err
-  }
-
-  return customers, response, nil
-}
-
 // Create a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-customer
 func (service *CustomersService) Create(customer Customer) (*Customer, *http.Response, error) {
   _url := "/customers" 
@@ -122,6 +107,21 @@ func (service *CustomersService) Get(customerID string) (*Customer, *http.Respon
   }
 
   return customer, response, nil
+}
+
+// List customers. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-customers
+func (service *CustomersService) List(opts ListCustomerParams) (*[]Customer, *http.Response, error) {
+  _url := "/customers"
+  req, _ := service.client.NewRequest("GET", _url, opts, nil)
+
+  customers := new([]Customer)
+  response, err := service.client.Do(req, customers)
+
+  if err != nil {
+    return nil, response, err
+  }
+
+  return customers, response, nil
 }
 
 // Update a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-customer
