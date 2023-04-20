@@ -20,6 +20,7 @@ const (
   defaultRestEndpointVersion   = "v3"
   defaultHeaderName            = "Authorization"
   acceptedContentType          = "application/json"
+  userAgent                    = "go-woocommerce-api/1.1"
   clientRequestRetryAttempts   = 2
   clientRequestRetryHoldMillis = 1000
 )
@@ -158,6 +159,7 @@ func (client *Client) NewRequest(method, urlStr string, opts interface{}, body i
   req.Header.Add(client.auth.HeaderName, client.auth.ApiKey)
   req.Header.Add("Accept", acceptedContentType)
   req.Header.Add("Content-type", acceptedContentType)
+  req.Header.Add("User-Agent", userAgent)
 
   return req, nil
 }
