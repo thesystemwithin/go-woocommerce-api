@@ -180,7 +180,7 @@ type BatchOrderUpdateResponse struct {
 }
 
 // Create an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-an-order
-func (service *OrdersService) Create(order Order) (*Order, *http.Response, error) {
+func (service *OrdersService) Create(order *Order) (*Order, *http.Response, error) {
   _url := "/orders"
   req, _ := service.client.NewRequest("POST", _url, nil, order)
 
@@ -195,7 +195,7 @@ func (service *OrdersService) Create(order Order) (*Order, *http.Response, error
 }
 
 // Get an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#retrieve-an-order
-func (service *OrdersService) Get(orderId string , opts GetOrderParams) (*Order, *http.Response, error) {
+func (service *OrdersService) Get(orderId string , opts *GetOrderParams) (*Order, *http.Response, error) {
   _url := "/orders/" + orderId
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -210,7 +210,7 @@ func (service *OrdersService) Get(orderId string , opts GetOrderParams) (*Order,
 }
 
 // List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-orders
-func (service *OrdersService) List(opts ListOrdersParams) (*[]Order, *http.Response, error) {
+func (service *OrdersService) List(opts *ListOrdersParams) (*[]Order, *http.Response, error) {
   _url := "/orders"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -225,7 +225,7 @@ func (service *OrdersService) List(opts ListOrdersParams) (*[]Order, *http.Respo
 }
 
 // Update an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-an-order
-func (service *OrdersService) Update(orderId string , order Order) (*Order, *http.Response, error) {
+func (service *OrdersService) Update(orderId string , order *Order) (*Order, *http.Response, error) {
   _url := "/orders/" + orderId
   req, _ := service.client.NewRequest("PUT", _url, nil, order)
 
@@ -240,7 +240,7 @@ func (service *OrdersService) Update(orderId string , order Order) (*Order, *htt
 }
 
 // Delete an order. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-an-order
-func (service *OrdersService) Delete(orderId string , opts DeleteOrderParams) (*Order, *http.Response, error) {
+func (service *OrdersService) Delete(orderId string , opts *DeleteOrderParams) (*Order, *http.Response, error) {
   _url := "/orders/" + orderId
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
@@ -255,7 +255,7 @@ func (service *OrdersService) Delete(orderId string , opts DeleteOrderParams) (*
 }
 
 // Batch update orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#batch-update-orders
-func (service *OrdersService) Batch(opts BatchOrderUpdate) (*BatchOrderUpdateResponse, *http.Response, error) {
+func (service *OrdersService) Batch(opts *BatchOrderUpdate) (*BatchOrderUpdateResponse, *http.Response, error) {
   _url := "/orders/batch"
   req, _ := service.client.NewRequest("POST", _url, opts, nil)
 
