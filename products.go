@@ -178,7 +178,7 @@ type BatchProductUpdateResponse struct {
 }
 
 // Create a product. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-product
-func (service *ProductsService) Create(product *Product) (*Product, *http.Response, error) {
+func (service *ProductsService) Create(product Product) (*Product, *http.Response, error) {
   _url := "/products" 
   req, _ := service.client.NewRequest("POST", _url, nil, product)
 
@@ -208,7 +208,7 @@ func (service *ProductsService) Get(productID string) (*Product, *http.Response,
 }
 
 // List products. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-products
-func (service *ProductsService) List(opts *ListProductParams) (*[]Product, *http.Response, error) {
+func (service *ProductsService) List(opts ListProductParams) (*[]Product, *http.Response, error) {
   _url := "/products"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -223,7 +223,7 @@ func (service *ProductsService) List(opts *ListProductParams) (*[]Product, *http
 }
 
 // Update a product. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-product
-func (service *ProductsService) Update(productID string, product *Product) (*Product, *http.Response, error) {
+func (service *ProductsService) Update(productID string, product Product) (*Product, *http.Response, error) {
   _url := "/products/" + productID
   req, _ := service.client.NewRequest("PUT", _url, nil, product)
 
@@ -238,7 +238,7 @@ func (service *ProductsService) Update(productID string, product *Product) (*Pro
 }
 
 // Delete a product. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-a-product
-func (service *ProductsService) Delete(productID string, opts *DeleteProductParams) (*Product, *http.Response, error) {
+func (service *ProductsService) Delete(productID string, opts DeleteProductParams) (*Product, *http.Response, error) {
   _url := "/products/" + productID
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
@@ -253,7 +253,7 @@ func (service *ProductsService) Delete(productID string, opts *DeleteProductPara
 }
 
 // Batch update products. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#batch-update-products
-func (service *ProductsService) Batch(opts *BatchProductUpdate) (*BatchProductUpdateResponse, *http.Response, error) {
+func (service *ProductsService) Batch(opts BatchProductUpdate) (*BatchProductUpdateResponse, *http.Response, error) {
   _url := "/products/batch"
   req, _ := service.client.NewRequest("POST", _url, nil, opts)
 

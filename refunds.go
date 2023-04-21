@@ -69,7 +69,7 @@ type DeleteRefundParams struct {
 }
 
 // Create a refund. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-refund
-func (service *RefundsService) Create(orderId string, refund *Refund) (*Refund, *http.Response, error) {
+func (service *RefundsService) Create(orderId string, refund Refund) (*Refund, *http.Response, error) {
   _url := "/orders/" + orderId + "/refunds"
   req, _ := service.client.NewRequest("POST", _url, nil, refund)
 
@@ -99,7 +99,7 @@ func (service *RefundsService) Get(orderId string, refundId string) (*Refund, *h
 }
 
 // List orders. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-refunds
-func (service *RefundsService) List(orderId string, opts *ListRefundParams) (*[]Refund, *http.Response, error) {
+func (service *RefundsService) List(orderId string, opts ListRefundParams) (*[]Refund, *http.Response, error) {
   _url := "/orders/" + orderId + "/refunds"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -114,7 +114,7 @@ func (service *RefundsService) List(orderId string, opts *ListRefundParams) (*[]
 }
 
 // Delete a refund. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-a-refund
-func (service *RefundsService) Delete(orderId string, refundId string, opts *DeleteRefundParams) (*Refund, *http.Response, error) {
+func (service *RefundsService) Delete(orderId string, refundId string, opts DeleteRefundParams) (*Refund, *http.Response, error) {
   _url := "/orders/" + orderId + "/refunds/" + refundId
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 

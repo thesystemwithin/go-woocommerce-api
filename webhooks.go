@@ -55,7 +55,7 @@ type BatchWebhookUpdateResponse struct {
 }
 
 // Create a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-webhook
-func (service *WebhookService) Create(webhook *Webhook) (*Webhook, *http.Response, error) {
+func (service *WebhookService) Create(webhook Webhook) (*Webhook, *http.Response, error) {
   _url := "/webhooks" 
   req, _ := service.client.NewRequest("POST", _url, nil, webhook)
 
@@ -85,7 +85,7 @@ func (service *WebhookService) Get(webhookID string) (*Webhook, *http.Response, 
 }
 
 // List Webhooks. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-webhooks
-func (service *WebhookService) List(opts *ListWebhooksParams) (*[]Webhook,  *http.Response, error) {
+func (service *WebhookService) List(opts ListWebhooksParams) (*[]Webhook,  *http.Response, error) {
   _url := "/webhooks"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -100,7 +100,7 @@ func (service *WebhookService) List(opts *ListWebhooksParams) (*[]Webhook,  *htt
 }
 
 // Update a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-webhook
-func (service *WebhookService) Update(webhookID string, webhook *Webhook) (*Webhook, *http.Response, error) {
+func (service *WebhookService) Update(webhookID string, webhook Webhook) (*Webhook, *http.Response, error) {
   _url := "/webhooks/" + webhookID
   req, _ := service.client.NewRequest("PUT", _url, nil, webhook)
 
@@ -115,7 +115,7 @@ func (service *WebhookService) Update(webhookID string, webhook *Webhook) (*Webh
 }
 
 // Delete a webhook. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-a-webhook
-func (service *WebhookService) Delete(webhookID string, opts *DeleteWebhookParams) (*Webhook, *http.Response, error) {
+func (service *WebhookService) Delete(webhookID string, opts DeleteWebhookParams) (*Webhook, *http.Response, error) {
   _url := "/webhooks/" + webhookID
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
@@ -130,7 +130,7 @@ func (service *WebhookService) Delete(webhookID string, opts *DeleteWebhookParam
 }
 
 // Batch update webhooks. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#batch-update-webhooks
-func (service *WebhookService) Batch(opts *BatchWebhookUpdate) (*BatchWebhookUpdateResponse, *http.Response, error) {
+func (service *WebhookService) Batch(opts BatchWebhookUpdate) (*BatchWebhookUpdateResponse, *http.Response, error) {
   _url := "/webhooks/batch"
   req, _ := service.client.NewRequest("POST", _url, nil, opts)
 

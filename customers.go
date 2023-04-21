@@ -80,7 +80,7 @@ type File struct  {
 }
 
 // Create a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#create-a-customer
-func (service *CustomersService) Create(customer *Customer) (*Customer, *http.Response, error) {
+func (service *CustomersService) Create(customer Customer) (*Customer, *http.Response, error) {
   _url := "/customers" 
   req, _ := service.client.NewRequest("POST", _url, nil, customer)
 
@@ -110,7 +110,7 @@ func (service *CustomersService) Get(customerID string) (*Customer, *http.Respon
 }
 
 // List customers. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#list-all-customers
-func (service *CustomersService) List(opts *ListCustomerParams) (*[]Customer, *http.Response, error) {
+func (service *CustomersService) List(opts ListCustomerParams) (*[]Customer, *http.Response, error) {
   _url := "/customers"
   req, _ := service.client.NewRequest("GET", _url, opts, nil)
 
@@ -125,7 +125,7 @@ func (service *CustomersService) List(opts *ListCustomerParams) (*[]Customer, *h
 }
 
 // Update a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#update-a-customer
-func (service *CustomersService) Update(customerID string, customer *Customer) (*Customer, *http.Response, error) {
+func (service *CustomersService) Update(customerID string, customer Customer) (*Customer, *http.Response, error) {
   _url := "/customers/" + customerID
   req, _ := service.client.NewRequest("PUT", _url, nil, customer)
 
@@ -140,7 +140,7 @@ func (service *CustomersService) Update(customerID string, customer *Customer) (
 }
 
 // Delete a customer. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#delete-a-customer
-func (service *CustomersService) Delete(customerID string, opts *DeleteCustomerParams) (*Customer, *http.Response, error) {
+func (service *CustomersService) Delete(customerID string, opts DeleteCustomerParams) (*Customer, *http.Response, error) {
   _url := "/customers/" + customerID
   req, _ := service.client.NewRequest("DELETE", _url, opts, nil)
 
@@ -155,7 +155,7 @@ func (service *CustomersService) Delete(customerID string, opts *DeleteCustomerP
 }
 
 // Batch update customers. Reference: https://woocommerce.github.io/woocommerce-rest-api-docs/#batch-update-customers
-func (service *CustomersService) Batch(opts *BatchCustomerUpdate) (*BatchCustomerUpdateResponse, *http.Response, error) {
+func (service *CustomersService) Batch(opts BatchCustomerUpdate) (*BatchCustomerUpdateResponse, *http.Response, error) {
   _url := "/customers/batch"
   req, _ := service.client.NewRequest("POST", _url, nil, opts)
 
