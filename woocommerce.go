@@ -14,6 +14,7 @@ import (
   "time"
 
   "github.com/google/go-querystring/query"
+  "github.com/JoshuaDoes/crunchio"
 )
 
 const (
@@ -21,8 +22,8 @@ const (
   defaultHeaderName            = "Authorization"
   acceptedContentType          = "application/json"
   userAgent                    = "go-woocommerce-api/1.1"
-  clientRequestRetryAttempts   = 2
-  clientRequestRetryHoldMillis = 1000
+  clientRequestRetryAttempts   = 1
+  clientRequestRetryHoldMillis = 250
 )
 
 var errorDoAllAttemptsExhausted = errors.New("all request attempts were exhausted")
@@ -45,12 +46,14 @@ type Client struct {
   auth *auth
   baseURL *url.URL
 
+  Categories    *CategoriesService
   Coupons       *CouponsService
   Customers     *CustomersService
-  Orders        *OrdersService
   OrderNotes    *OrderNotesService
-  Refunds       *RefundsService
+  Orders        *OrdersService
   Products      *ProductsService
+  Refunds       *RefundsService
+  Tags          *TagsService
   Webhooks      *WebhookService
 }
 
@@ -99,12 +102,14 @@ func New(shopURL string) (*Client, error) {
   client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
 
   // Map services
+  client.Categories = &CategoriesService{client: client}
   client.Coupons = &CouponsService{client: client}
   client.Customers = &CustomersService{client: client}
-  client.Orders = &OrdersService{client: client}
   client.OrderNotes = &OrderNotesService{client: client}
-  client.Refunds = &RefundsService{client: client}
+  client.Orders = &OrdersService{client: client}
   client.Products = &ProductsService{client: client}
+  client.Refunds = &RefundsService{client: client}
+  client.Tags = &TagsService{client: client}
   client.Webhooks = &WebhookService{client: client}
 
   return client, nil
@@ -216,11 +221,22 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
     return resp, false, err
   }
 
+  body, err := ioutil.ReadAll(resp.Body)
+  if err != nil {
+    return resp, false, err
+  }
+  bodyBuf := crunchio.NewBuffer(body)
+  
+  /*fmt.Printf("--- JSON DUMP ---\n\n%s\n\n--- ---- ---- ---\n", bodyBuf.String())
+  if _, err := bodyBuf.Seek(0, 0); err != nil {
+    return resp, false, err
+  }*/
+
   if v != nil {
     if w, ok := v.(io.Writer); ok {
-      io.Copy(w, resp.Body)
+      io.Copy(w, bodyBuf)
     } else {
-      err = json.NewDecoder(resp.Body).Decode(v)
+      err = json.NewDecoder(bodyBuf).Decode(v)
       if err == io.EOF {
         err = nil
       }

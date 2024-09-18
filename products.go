@@ -1,6 +1,7 @@
 package woocommerce
 
 import (
+  "encoding/json"
   "net/http"
 )
 
@@ -63,17 +64,23 @@ type Product struct {
   MenuOrder              int                  `json:"menu_order,omitempty"`
   Variations             *[]int               `json:"variations,omitempty"`
   GroupedProducts        *[]int               `json:"grouped_products,omitempty"`
-  MetaData               *[]int               `json:"meta_data,omitempty"`
+  MetaData               *[]ProductMetaData   `json:"meta_data,omitempty"`
   RelatedIds             *[]int               `json:"related_ids,omitempty"`
   CrossSellIds           *[]int               `json:"cross_sell_ids,omitempty"`
   UpsellIds              *[]int               `json:"upsell_ids,omitempty"`
-  Images                 *Image               `json:"images,omitempty"`
+  Images                 *[]Image               `json:"images,omitempty"`
   Dimensions             *ProductDimensions   `json:"dimensions,omitempty"`
   Downloads              *[]ProductDownloads  `json:"downloads,omitempty"`
   Categories             *[]ProductCategory   `json:"categories,omitempty"`
   Tags                   *[]ProductTag        `json:"tags,omitempty"`
   Attributes             *[]ProductAttributes `json:"attributes,omitempty"`
   DefaultAttributes      *[]DefaultAttributes `json:"default_attributes,omitempty"`
+}
+
+type ProductMetaData struct {
+  Id    int             `json:"id,omitempty"`
+  Key   string          `json:"key,omitempty"`
+  Value json.RawMessage `json:"value,omitempty"`
 }
 
 type ProductDownloads struct {
@@ -168,7 +175,7 @@ type DeleteProductParams struct {
 type BatchProductUpdate struct {
   Create  *[]Product `json:"create,omitempty"`
   Update  *[]Product `json:"update,omitempty"`
-  Delete  *[]int      `json:"delete,omitempty"`
+  Delete  *[]int     `json:"delete,omitempty"`
 }
 
 type BatchProductUpdateResponse struct {
