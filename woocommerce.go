@@ -10,11 +10,12 @@ import (
   "io/ioutil"
   "net/http"
   "net/url"
+  "strconv"
   "strings"
   "time"
 
-  "github.com/google/go-querystring/query"
   "github.com/JoshuaDoes/crunchio"
+  "github.com/google/go-querystring/query"
 )
 
 const (
@@ -22,8 +23,8 @@ const (
   defaultHeaderName            = "Authorization"
   acceptedContentType          = "application/json"
   userAgent                    = "go-woocommerce-api/1.1"
-  clientRequestRetryAttempts   = 1
-  clientRequestRetryHoldMillis = 250
+  clientRequestRetryAttempts   = 2
+  clientRequestRetryHoldMillis = 1000
 )
 
 var errorDoAllAttemptsExhausted = errors.New("all request attempts were exhausted")
@@ -41,20 +42,21 @@ type auth struct {
 }
 
 type Client struct {
-  config *ClientConfig
-  client *http.Client
-  auth *auth
+  config  *ClientConfig
+  client  *http.Client
+  auth    *auth
   baseURL *url.URL
+  rl      *RateLimit
 
-  Categories    *CategoriesService
-  Coupons       *CouponsService
-  Customers     *CustomersService
-  OrderNotes    *OrderNotesService
-  Orders        *OrdersService
-  Products      *ProductsService
-  Refunds       *RefundsService
-  Tags          *TagsService
-  Webhooks      *WebhookService
+  Categories *CategoriesService
+  Coupons    *CouponsService
+  Customers  *CustomersService
+  OrderNotes *OrderNotesService
+  Orders     *OrdersService
+  Products   *ProductsService
+  Refunds    *RefundsService
+  Tags       *TagsService
+  Webhooks   *WebhookService
 }
 
 type service struct {
@@ -99,7 +101,7 @@ func New(shopURL string) (*Client, error) {
     return nil, err
   }
 
-  client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL}
+  client := &Client{config: &config, client: config.HttpClient, auth: &auth{}, baseURL: baseURL, rl: &RateLimit{}}
 
   // Map services
   client.Categories = &CategoriesService{client: client}
@@ -169,6 +171,96 @@ func (client *Client) NewRequest(method, urlStr string, opts interface{}, body i
   return req, nil
 }
 
+type RateLimit struct {
+  Limit     int       //Total amount of requests per rate
+  Remaining int       //Remaining requests for this rate window
+  Reset     int       //Seconds until the rate limit resets
+  After     int       //Seconds until the exceeded rate limit is unblocked
+  LastReq   time.Time //The last recorded request time for calculating the rate limit
+}
+
+// Sleep: TODO: Sleep properly
+func (rl *RateLimit) Sleep() {
+  /*if rl.LastReq.IsZero() || rl.Remaining > 0 {
+      rl.LastReq = time.Now()
+      return
+    }
+
+    now := time.Now().Unix()
+    since := rl.LastReq.Unix()
+    remaining := int(now - since)
+    seconds := time.Second * time.Duration(remaining-rl.Reset)
+
+    if seconds > 0 {
+      fmt.Println("[WOOCOMMERCE] Sleeping for", seconds)
+      time.Sleep(seconds)
+    }*/
+}
+
+func (rl *RateLimit) String() string {
+  return fmt.Sprintf("RateLimit{Limit:%d Remaining:%d Reset:%d After:%d LastReq:%d}",
+    rl.Limit, rl.Remaining, rl.Reset, rl.After, rl.LastReq.Unix())
+}
+
+func (client *Client) RateLimitUpdate(resp *http.Response) {
+  if client.rl == nil {
+    client.rl = new(RateLimit)
+  }
+  client.rl.LastReq = time.Now()
+
+  if resp != nil {
+
+    for key, val := range resp.Header {
+      //fmt.Printf("[WOOCOMMERCE] Header: %s = %v\n", key, val)
+
+      switch strings.ToLower(key) {
+      case "x-ratelimit-limit":
+        if len(val) <= 0 {
+          continue
+        }
+        limit, err := strconv.Atoi(val[0])
+        if err != nil {
+          fmt.Println("[WOOCOMMERCE] Failed to convert limit:", val[0])
+          continue
+        }
+        client.rl.Limit = limit
+      case "x-ratelimit-remaining":
+        if len(val) <= 0 {
+          continue
+        }
+        remaining, err := strconv.Atoi(val[0])
+        if err != nil {
+          fmt.Println("[WOOCOMMERCE] Failed to convert remaining:", val[0])
+          continue
+        }
+        client.rl.Remaining = remaining
+      case "x-ratelimit-reset":
+        if len(val) <= 0 {
+          continue
+        }
+        reset, err := strconv.Atoi(val[0])
+        if err != nil {
+          fmt.Println("[WOOCOMMERCE] Failed to convert reset:", val[0])
+          continue
+        }
+        client.rl.Reset = reset
+      case "x-ratelimit-retry-after":
+        if len(val) <= 0 {
+          continue
+        }
+        after, err := strconv.Atoi(val[0])
+        if err != nil {
+          fmt.Println("[WOOCOMMERCE] Failed to convert after:", val[0])
+          continue
+        }
+        client.rl.After = after
+      }
+    }
+
+    //fmt.Println("[WOOCOMMERCE] Rate limit stats:", client.rl)
+  }
+}
+
 // Do sends an API request
 func (client *Client) Do(req *http.Request, v interface{}) (*http.Response, error) {
   var lastErr error
@@ -176,14 +268,16 @@ func (client *Client) Do(req *http.Request, v interface{}) (*http.Response, erro
   attempts := 0
 
   for attempts < clientRequestRetryAttempts {
-    // Hold before this attempt? (ie. not first attempt)
-    if attempts > 0 {
-      time.Sleep(clientRequestRetryHoldMillis * time.Millisecond)
-    }
+    attempts++
+
+    // Sleep if the rate limit says we should
+    client.rl.Sleep()
 
     // Dispatch request attempt
-    attempts++
     resp, shouldRetry, err := client.doAttempt(req, v)
+
+    // Store the newest rate limit stats
+    client.RateLimitUpdate(resp)
 
     // Return response straight away? (we are done)
     if !shouldRetry {
@@ -211,7 +305,7 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
   resp, err := client.client.Do(req)
 
   if checkRequestRetry(resp, err) {
-    return nil, true, err
+    return resp, true, err
   }
 
   defer resp.Body.Close()
@@ -226,11 +320,11 @@ func (client *Client) doAttempt(req *http.Request, v interface{}) (*http.Respons
     return resp, false, err
   }
   bodyBuf := crunchio.NewBuffer(body)
-  
+
   /*fmt.Printf("--- JSON DUMP ---\n\n%s\n\n--- ---- ---- ---\n", bodyBuf.String())
-  if _, err := bodyBuf.Seek(0, 0); err != nil {
-    return resp, false, err
-  }*/
+    if _, err := bodyBuf.Seek(0, 0); err != nil {
+      return resp, false, err
+    }*/
 
   if v != nil {
     if w, ok := v.(io.Writer); ok {
